@@ -1,0 +1,1160 @@
+<!doctype html>
+<html lang="es" class="scroll-smooth">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Protocolo Acelerado: Inglés A2 a B2</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+		<style>
+			@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap");
+			body {
+				font-family: "Inter", sans-serif;
+				background-color: #fafaf9;
+				color: #1e293b;
+			}
+
+			.chart-container {
+				position: relative;
+				width: 100%;
+				max-width: 500px;
+				margin-left: auto;
+				margin-right: auto;
+				height: 350px;
+				max-height: 400px;
+			}
+
+			.tab-active {
+				border-bottom: 2px solid #0d9488;
+				color: #0d9488;
+				font-weight: 600;
+			}
+			.timeline-dot {
+				transition: all 0.3s ease;
+			}
+			.timeline-item:hover .timeline-dot {
+				transform: scale(1.2);
+				background-color: #0d9488;
+			}
+
+			/* Ocultar scrollbar pero permitir scroll */
+			.no-scrollbar::-webkit-scrollbar {
+				display: none;
+			}
+			.no-scrollbar {
+				-ms-overflow-style: none;
+				scrollbar-width: none;
+			}
+
+			/* Animaciones para IA */
+			@keyframes spin {
+				0% {
+					transform: rotate(0deg);
+				}
+				100% {
+					transform: rotate(360deg);
+				}
+			}
+			.spinner {
+				border: 3px solid rgba(255, 255, 255, 0.3);
+				border-top: 3px solid #fff;
+				border-radius: 50%;
+				width: 16px;
+				height: 16px;
+				animation: spin 1s linear infinite;
+				display: inline-block;
+				vertical-align: middle;
+				margin-right: 8px;
+			}
+			.animate-fade-in {
+				animation: fadeIn 0.4s ease-out forwards;
+			}
+			@keyframes fadeIn {
+				from {
+					opacity: 0;
+					transform: translateY(5px);
+				}
+				to {
+					opacity: 1;
+					transform: translateY(0);
+				}
+			}
+		</style>
+		<script>
+			tailwind.config = {
+				theme: {
+					extend: {
+						colors: {
+							primary: "#0f172a" /* Slate 900 */,
+							secondary: "#334155" /* Slate 700 */,
+							accent: "#0d9488" /* Teal 600 - Success/Action */,
+							bgLight: "#fafaf9" /* Stone 50 */,
+							cardBg: "#ffffff",
+						},
+					},
+				},
+			};
+		</script>
+	</head>
+	<!-- Chosen Palette: Professional Warm Minimalist. Background: Stone 50. Text: Slate 900/700. Accents: Teal 600 for progress and action. -->
+	<!-- Application Structure Plan: A linear narrative dashboard. 
+     1. Hero: Introduces the goal (A2->B2).
+     2. Theory (Why it works): Text + Line Chart showing SRS effectiveness to build trust.
+     3. Resources: Interactive filterable grid. Better UX than a static table.
+     4. Time Architecture: Side-by-side Donut charts to visualize daily vs weekend commitment.
+     5. Roadmap: Vertical interactive timeline. Clicking milestones reveals details, keeping the view clean.
+     6. Employability: Tabbed interface for industry-specific vocabulary strategies.
+     This structure follows the user's prompt exactly but uses SPA interaction patterns (tabs, filters, expandable sections) to prevent cognitive overload. -->
+	<!-- Visualization & Content Choices: 
+     - Theory -> Goal: Prove SRS works -> Viz: Line Chart (Chart.js) comparing forgetting curves -> Interaction: Hover tooltips -> Justification: Visual evidence is stronger than text -> Lib: Chart.js (NO SVG).
+     - Resources -> Goal: Organize tools -> Viz: Card Grid -> Interaction: Filter by Free/Paid -> Justification: Easy scanning -> Lib: HTML/JS.
+     - Time -> Goal: Show distribution -> Viz: Donut Charts (Chart.js) -> Interaction: Hover details -> Justification: Best for showing parts of a whole (1 hour/day) -> Lib: Chart.js (NO SVG).
+     - Roadmap -> Goal: Timeline -> Viz: Vertical CSS timeline -> Interaction: Click to expand month details -> Justification: Keeps UI clean while offering deep dives -> Lib: HTML/CSS/JS (NO Mermaid).
+-->
+	<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+	<body
+		class="antialiased text-primary selection:bg-accent selection:text-white"
+	>
+		<!-- Navigation -->
+		<nav
+			class="fixed w-full bg-white/90 backdrop-blur-md border-b border-gray-200 z-50"
+		>
+			<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+				<div class="flex justify-between h-16">
+					<div class="flex items-center">
+						<span class="text-xl font-bold tracking-tight text-accent"
+							>HyperPolyglot</span
+						>
+					</div>
+					<div class="hidden md:flex items-center space-x-8">
+						<a
+							href="#teoria"
+							class="text-sm font-medium text-secondary hover:text-accent transition"
+							>Neurociencia</a
+						>
+						<a
+							href="#recursos"
+							class="text-sm font-medium text-secondary hover:text-accent transition"
+							>Recursos</a
+						>
+						<a
+							href="#tiempo"
+							class="text-sm font-medium text-secondary hover:text-accent transition"
+							>Time-Blocking</a
+						>
+						<a
+							href="#ruta"
+							class="text-sm font-medium text-secondary hover:text-accent transition"
+							>Ruta Mensual</a
+						>
+						<a
+							href="#empleo"
+							class="text-sm font-medium text-secondary hover:text-accent transition"
+							>Empleabilidad</a
+						>
+					</div>
+				</div>
+			</div>
+		</nav>
+
+		<!-- Hero Section -->
+		<header
+			class="pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto text-center"
+		>
+			<div
+				class="inline-block mb-4 px-3 py-1 rounded-full bg-teal-100 text-teal-800 text-xs font-semibold tracking-wider uppercase"
+			>
+				Protocolo Basado en Evidencia
+			</div>
+			<h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-6">
+				Ruta Óptima: <span class="text-accent">Inglés A2 a B2</span>
+			</h1>
+			<p class="mt-4 max-w-2xl text-lg text-secondary mx-auto">
+				Sistema hiper-optimizado para profesionales. Basado en Input
+				Comprensible (Krashen) y Repetición Espaciada (SRS). Diseñado para
+				requerir solo 1 hora diaria, maximizando el Retorno de Inversión (ROI)
+				de tu tiempo.
+			</p>
+		</header>
+
+		<!-- 1. Fundamento Teórico -->
+		<section id="teoria" class="py-16 bg-white">
+			<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+				<div class="mb-10">
+					<h2 class="text-3xl font-bold mb-4">
+						1. Fundamento Teórico Acelerado
+					</h2>
+					<p class="text-secondary">
+						Por qué este sistema es más rápido que la educación tradicional. La
+						ciencia detrás del diseño.
+					</p>
+				</div>
+
+				<div class="grid md:grid-cols-2 gap-12 items-center">
+					<div class="space-y-6 text-secondary leading-relaxed">
+						<p>
+							El método tradicional (Gramática-Traducción) falla porque trata el
+							idioma como una materia académica a memorizar, no como una
+							habilidad a adquirir. La investigación del
+							<strong>Dr. Stephen Krashen (1982)</strong> sobre la
+							<em>Teoría del Input Comprensible</em> demuestra que adquirimos
+							lenguaje de una sola manera: cuando entendemos el mensaje.
+							Necesitamos exposición masiva a contenido ligeramente por encima
+							de nuestro nivel actual (i+1).
+						</p>
+						<p>
+							Para retener vocabulario técnico sin "estudiar" horas, utilizamos
+							<strong>Sistemas de Repetición Espaciada (SRS)</strong>. Basado en
+							la <em>Curva del Olvido de Ebbinghaus (1885)</em>, el software SRS
+							programa repasos de vocabulario justo en el momento exacto en que
+							tu cerebro está a punto de olvidarlo, forzando la consolidación en
+							la memoria a largo plazo con el mínimo esfuerzo de tiempo.
+						</p>
+					</div>
+					<div
+						class="bg-bgLight p-6 rounded-2xl border border-gray-100 shadow-sm"
+					>
+						<h3 class="text-center font-semibold mb-2 text-sm text-secondary">
+							Curva del Olvido vs. Repetición Espaciada (SRS)
+						</h3>
+						<div class="chart-container">
+							<canvas id="srsChart"></canvas>
+						</div>
+						<p class="text-xs text-center text-gray-500 mt-2">
+							Interactúa con el gráfico. Cada "repaso" SRS reinicia la curva de
+							retención.
+						</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- 2. Matriz de Recursos -->
+		<section id="recursos" class="py-16 bg-bgLight border-y border-gray-200">
+			<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+				<div class="flex flex-col md:flex-row justify-between items-end mb-10">
+					<div>
+						<h2 class="text-3xl font-bold mb-4">2. Matriz de Recursos</h2>
+						<p class="text-secondary max-w-2xl">
+							Herramientas con el mayor ROI de tiempo. Ignora academias
+							tradicionales; el trabajo autónomo guiado es más eficiente.
+						</p>
+					</div>
+					<div class="mt-4 md:mt-0 flex space-x-2">
+						<button
+							onclick="filterResources('Todos')"
+							class="px-4 py-2 bg-primary text-white text-sm rounded-lg filter-btn"
+							data-filter="Todos"
+						>
+							Todos
+						</button>
+						<button
+							onclick="filterResources('Gratis')"
+							class="px-4 py-2 bg-gray-200 text-secondary hover:bg-gray-300 text-sm rounded-lg filter-btn"
+							data-filter="Gratis"
+						>
+							Gratis
+						</button>
+						<button
+							onclick="filterResources('Pago')"
+							class="px-4 py-2 bg-gray-200 text-secondary hover:bg-gray-300 text-sm rounded-lg filter-btn"
+							data-filter="Pago"
+						>
+							Pago (Alto ROI)
+						</button>
+					</div>
+				</div>
+
+				<div
+					id="resourceGrid"
+					class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+				>
+					<!-- Generado por JS -->
+				</div>
+			</div>
+		</section>
+
+		<!-- 3. Arquitectura del Tiempo -->
+		<section id="tiempo" class="py-16 bg-white">
+			<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+				<div class="mb-10 text-center">
+					<h2 class="text-3xl font-bold mb-4">
+						3. Arquitectura del Tiempo (Time-Blocking)
+					</h2>
+					<p class="text-secondary max-w-2xl mx-auto">
+						La constancia supera a la intensidad. Restricción estricta: 1 hora
+						de lunes a viernes.
+					</p>
+				</div>
+
+				<div class="grid md:grid-cols-2 gap-12">
+					<div
+						class="bg-bgLight p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col items-center"
+					>
+						<h3 class="font-bold text-lg mb-4">Lunes a Viernes (1 Hora)</h3>
+						<div class="chart-container">
+							<canvas id="weekdayChart"></canvas>
+						</div>
+						<ul class="mt-6 w-full space-y-2 text-sm text-secondary">
+							<li class="flex justify-between border-b pb-1">
+								<span>Vocabulario (Anki)</span>
+								<span class="font-bold">15 min</span>
+							</li>
+							<li class="flex justify-between border-b pb-1">
+								<span>Input Activo (Podcast/Video)</span>
+								<span class="font-bold">30 min</span>
+							</li>
+							<li class="flex justify-between pb-1">
+								<span>Lectura / Shadowing</span>
+								<span class="font-bold">15 min</span>
+							</li>
+						</ul>
+					</div>
+
+					<div
+						class="bg-bgLight p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col items-center"
+					>
+						<h3 class="font-bold text-lg mb-4">Fines de Semana (2+ Horas)</h3>
+						<div class="chart-container">
+							<canvas id="weekendChart"></canvas>
+						</div>
+						<ul class="mt-6 w-full space-y-2 text-sm text-secondary">
+							<li class="flex justify-between border-b pb-1">
+								<span>Output: Conversación Real</span>
+								<span class="font-bold">1 hora</span>
+							</li>
+							<li class="flex justify-between pb-1">
+								<span>Input Extenso (Película/Lectura)</span>
+								<span class="font-bold">1+ hora</span>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- 4. Hoja de Ruta -->
+		<section id="ruta" class="py-16 bg-primary text-white">
+			<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+				<div class="mb-12 text-center">
+					<h2 class="text-3xl font-bold mb-4 text-white">
+						4. La Hoja de Ruta A2 ➔ B2
+					</h2>
+					<p class="text-gray-400">
+						Progreso estructurado a 6 meses. Haz clic en cada mes para ver los
+						objetivos MCER.
+					</p>
+				</div>
+
+				<div class="relative border-l-2 border-gray-600 ml-4 md:ml-0">
+					<!-- Mes 1 -->
+					<div
+						class="mb-10 ml-8 timeline-item cursor-pointer"
+						onclick="toggleTimeline('m1')"
+					>
+						<div
+							class="absolute w-4 h-4 bg-gray-600 rounded-full -left-[9px] timeline-dot border-4 border-primary"
+						></div>
+						<h3 class="text-xl font-bold text-accent">
+							Mes 1: Consolidación y Hábitos
+						</h3>
+						<p class="text-sm text-gray-400 mt-1">Haz clic para expandir</p>
+						<div
+							id="m1-content"
+							class="hidden mt-4 bg-secondary p-5 rounded-lg text-sm space-y-3"
+						>
+							<p>
+								<strong>Objetivo:</strong> Crear el hábito de 1 hora diaria y
+								automatizar herramientas.
+							</p>
+							<ul class="list-disc pl-5 space-y-1 text-gray-300">
+								<li>
+									Configurar Anki y comenzar el mazo de las 1000 palabras más
+									frecuentes (General).
+								</li>
+								<li>
+									Consumir podcasts adaptados nivel A2/B1 (ej. "English Learning
+									for Curious Minds").
+								</li>
+								<li>
+									<strong>Hito MCER:</strong> Comprender frases y expresiones de
+									uso frecuente relacionadas con áreas de experiencia que le son
+									especialmente relevantes.
+								</li>
+							</ul>
+						</div>
+					</div>
+
+					<!-- Mes 3 -->
+					<div
+						class="mb-10 ml-8 timeline-item cursor-pointer"
+						onclick="toggleTimeline('m3')"
+					>
+						<div
+							class="absolute w-4 h-4 bg-gray-600 rounded-full -left-[9px] timeline-dot border-4 border-primary"
+						></div>
+						<h3 class="text-xl font-bold text-accent">
+							Mes 3: Transición al Input Nativo
+						</h3>
+						<p class="text-sm text-gray-400 mt-1">Haz clic para expandir</p>
+						<div
+							id="m3-content"
+							class="hidden mt-4 bg-secondary p-5 rounded-lg text-sm space-y-3"
+						>
+							<p>
+								<strong>Objetivo:</strong> Abandonar material para "estudiantes"
+								e introducir material nativo técnico.
+							</p>
+							<ul class="list-disc pl-5 space-y-1 text-gray-300">
+								<li>
+									Comenzar a minar oraciones (Sentence Mining) de artículos de
+									tu industria hacia Anki.
+								</li>
+								<li>
+									1 sesión semanal de iTalki (30-45 min) enfocada solo en perder
+									el miedo a hablar.
+								</li>
+								<li>
+									Iniciar técnica de <em>Shadowing</em> (repetir en voz alta lo
+									que escuchas) 10 min/día.
+								</li>
+								<li>
+									<strong>Hito MCER:</strong> Comprender los puntos principales
+									de textos claros y en lengua estándar si tratan sobre
+									cuestiones que le son conocidas.
+								</li>
+							</ul>
+						</div>
+					</div>
+
+					<!-- Mes 6 -->
+					<div
+						class="mb-10 ml-8 timeline-item cursor-pointer"
+						onclick="toggleTimeline('m6')"
+					>
+						<div
+							class="absolute w-4 h-4 bg-gray-600 rounded-full -left-[9px] timeline-dot border-4 border-primary"
+						></div>
+						<h3 class="text-xl font-bold text-accent">
+							Mes 6: Fluidez Profesional (B2)
+						</h3>
+						<p class="text-sm text-gray-400 mt-1">Haz clic para expandir</p>
+						<div
+							id="m6-content"
+							class="hidden mt-4 bg-secondary p-5 rounded-lg text-sm space-y-3"
+						>
+							<p>
+								<strong>Objetivo:</strong> Capacidad de sostener entrevistas y
+								reuniones en tu área.
+							</p>
+							<ul class="list-disc pl-5 space-y-1 text-gray-300">
+								<li>
+									Consumo exclusivo de material nativo (Podcasts de tu
+									industria, TED Talks, Noticias).
+								</li>
+								<li>
+									Sesiones de iTalki simulando entrevistas de trabajo y
+									presentaciones.
+								</li>
+								<li>
+									<strong>Hito MCER (B2 Alcanzado):</strong> Relacionarse con
+									hablantes nativos con un grado suficiente de fluidez y
+									naturalidad de modo que la comunicación se realice sin
+									esfuerzo. Puede producir textos claros y detallados, y
+									defender un punto de vista.
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- 5. Empleabilidad -->
+		<section id="empleo" class="py-16 bg-white">
+			<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+				<div class="mb-10">
+					<h2 class="text-3xl font-bold mb-4">
+						5. Estrategia para Empleabilidad
+					</h2>
+					<p class="text-secondary">
+						El "Business English" no existe como un idioma separado; es
+						simplemente la estructura gramatical B2 combinada con jerga técnica
+						específica. Aquí te explicamos cómo integrarlo sin desviar tu
+						rutina.
+					</p>
+				</div>
+
+				<div
+					class="bg-bgLight rounded-2xl border border-gray-200 overflow-hidden"
+				>
+					<div
+						class="flex border-b border-gray-200 bg-gray-50 overflow-x-auto no-scrollbar"
+					>
+						<button
+							class="flex-1 py-4 px-6 text-sm font-medium focus:outline-none tab-active"
+							onclick="switchTab(event, 'mining')"
+						>
+							Sentence Mining Profesional
+						</button>
+						<button
+							class="flex-1 py-4 px-6 text-sm font-medium text-gray-500 hover:text-gray-700 focus:outline-none"
+							onclick="switchTab(event, 'italki')"
+						>
+							Simulación iTalki
+						</button>
+						<button
+							class="flex-1 py-4 px-6 text-sm font-medium text-gray-500 hover:text-gray-700 focus:outline-none"
+							onclick="switchTab(event, 'linkedin')"
+						>
+							Inmersión LinkedIn
+						</button>
+					</div>
+
+					<div class="p-8">
+						<!-- Tab Content 1 -->
+						<div id="tab-mining" class="tab-content block">
+							<h4 class="text-xl font-bold mb-3">
+								Sentence Mining Profesional (Minado de Oraciones)
+							</h4>
+							<p class="text-secondary mb-4">
+								En lugar de memorizar listas de vocabulario de negocios, extrae
+								oraciones completas de tu entorno laboral objetivo.
+							</p>
+
+							<!-- ✨ INTEGRA AI: Generador de Tarjetas Anki -->
+							<div
+								class="bg-teal-50 p-6 rounded-xl border border-teal-100 mb-6 shadow-sm"
+							>
+								<h5
+									class="font-bold text-teal-900 mb-2 flex items-center text-lg"
+								>
+									✨ Generador IA de Tarjetas Anki
+								</h5>
+								<p class="text-sm text-teal-800 mb-4">
+									Pega un párrafo en inglés de un artículo, reporte o correo de
+									tu industria. La IA extraerá el vocabulario clave nivel B2/C1
+									y generará las tarjetas para ti.
+								</p>
+								<textarea
+									id="mining-input"
+									class="w-full p-4 rounded-lg border border-teal-200 text-sm mb-4 focus:ring-2 focus:ring-accent focus:outline-none bg-white"
+									rows="3"
+									placeholder="Pega tu texto en inglés aquí... (Ej. The new update will streamline our deployment process and mitigate security vulnerabilities.)"
+								></textarea>
+								<button
+									onclick="runSentenceMiner()"
+									id="btn-mining"
+									class="bg-accent hover:bg-teal-700 text-white font-semibold py-2.5 px-5 rounded-lg text-sm transition shadow-sm flex items-center justify-center w-full sm:w-auto"
+								>
+									✨ Extraer Vocabulario
+								</button>
+								<div
+									id="mining-results"
+									class="mt-5 space-y-3 hidden animate-fade-in"
+								>
+									<!-- Resultados inyectados vía JS -->
+								</div>
+							</div>
+
+							<div class="bg-white p-4 rounded border border-gray-100 mb-4">
+								<p class="text-sm font-semibold text-accent mb-1">
+									El Proceso Manual (Alternativa):
+								</p>
+								<ol class="list-decimal pl-5 text-sm text-gray-600 space-y-1">
+									<li>
+										Lee artículos de <em>Harvard Business Review</em> o blogs de
+										tu industria.
+									</li>
+									<li>
+										Encuentra una frase donde entiendas todo excepto
+										<strong>una sola palabra</strong> técnica (Target Word).
+									</li>
+									<li>
+										Crea una tarjeta en Anki. Anverso: La oración completa con
+										la palabra oculta. Reverso: La palabra, su definición en
+										inglés, y pronunciación.
+									</li>
+								</ol>
+							</div>
+							<p class="text-xs text-gray-500 italic">
+								Ejemplo IT: "We need to deploy the new [patch] to fix the
+								vulnerability." -> Enseña vocabulario EN CONTEXTO.
+							</p>
+						</div>
+
+						<!-- Tab Content 2 -->
+						<div id="tab-italki" class="tab-content hidden">
+							<h4 class="text-xl font-bold mb-3">
+								Simulación Funcional en iTalki
+							</h4>
+							<p class="text-secondary mb-4">
+								No uses tutores para conversar del clima. Úsalos como
+								herramientas de simulación profesional.
+							</p>
+
+							<!-- ✨ INTEGRA AI: Simulador de Entrevistas -->
+							<div
+								class="bg-indigo-50 p-6 rounded-xl border border-indigo-100 mb-6 shadow-sm"
+							>
+								<h5
+									class="font-bold text-indigo-900 mb-2 flex items-center text-lg"
+								>
+									✨ Simulador IA de Entrevistas
+								</h5>
+								<p class="text-sm text-indigo-800 mb-4">
+									Practica respondiendo preguntas de entrevista en tiempo real.
+									La IA actuará como tu reclutador y luego evaluará tu gramática
+									y vocabulario.
+								</p>
+								<div
+									class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3 mb-5"
+								>
+									<input
+										type="text"
+										id="interview-role"
+										class="flex-1 p-3 rounded-lg border border-indigo-200 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white"
+										placeholder="Tu puesto (Ej. Project Manager, Frontend Dev)"
+									/>
+									<button
+										onclick="generateInterviewQuestion()"
+										id="btn-question"
+										class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 px-5 rounded-lg text-sm transition shadow-sm flex items-center justify-center"
+									>
+										✨ Generar Pregunta
+									</button>
+								</div>
+
+								<div id="interview-stage-2" class="hidden animate-fade-in">
+									<div
+										class="bg-white p-5 rounded-lg border border-indigo-200 mb-4 shadow-inner"
+									>
+										<p
+											class="text-xs font-bold tracking-wider text-indigo-400 uppercase mb-2"
+										>
+											Reclutador IA:
+										</p>
+										<p
+											id="interview-question-text"
+											class="text-indigo-900 font-medium text-lg"
+										></p>
+									</div>
+									<textarea
+										id="interview-answer"
+										class="w-full p-4 rounded-lg border border-indigo-200 text-sm mb-4 focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white"
+										rows="4"
+										placeholder="Escribe tu respuesta en inglés aquí de la forma más natural posible..."
+									></textarea>
+									<button
+										onclick="evaluateInterviewAnswer()"
+										id="btn-evaluate"
+										class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 px-5 rounded-lg text-sm transition shadow-sm flex items-center justify-center w-full sm:w-auto"
+									>
+										✨ Evaluar mi Respuesta
+									</button>
+									<div
+										id="interview-feedback"
+										class="mt-5 hidden bg-white p-5 rounded-lg border border-green-300 text-sm text-gray-800 shadow-sm animate-fade-in"
+									>
+										<!-- Feedback inyectado vía JS -->
+									</div>
+								</div>
+							</div>
+
+							<div class="bg-white p-4 rounded border border-gray-100">
+								<p class="text-sm font-semibold text-accent mb-1">
+									Instrucciones para tu tutor (Copia y pega):
+								</p>
+								<blockquote
+									class="border-l-4 border-gray-300 pl-4 italic text-sm text-gray-600 mt-2"
+								>
+									"Hi! I'm preparing for English job interviews in the [Tu
+									Industria] sector. For our classes, I want to do role-plays. I
+									will send you a job description. You act as the interviewer
+									asking behavioral questions (STAR method). Please correct my
+									vocabulary to make it sound more professional."
+								</blockquote>
+							</div>
+						</div>
+
+						<!-- Tab Content 3 -->
+						<div id="tab-linkedin" class="tab-content hidden">
+							<h4 class="text-xl font-bold mb-3">
+								Inmersión Ambiental vía LinkedIn
+							</h4>
+							<p class="text-secondary mb-4">
+								Convierte tu tiempo de redes sociales en tiempo de estudio
+								pasivo.
+							</p>
+							<ul class="list-disc pl-5 text-sm text-gray-600 space-y-2">
+								<li>
+									Cambia el idioma de la interfaz de tu teléfono y de LinkedIn a
+									Inglés.
+								</li>
+								<li>
+									Sigue a 20+ líderes de opinión angloparlantes en tu campo
+									específico.
+								</li>
+								<li>
+									<strong>Acción diaria:</strong> Lee sus posts y los
+									comentarios. Esto expone tu cerebro al lenguaje corporativo
+									real y coloquial ("corporate speak"), no al de los libros de
+									texto obsoletos.
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Footer -->
+		<footer class="bg-primary text-gray-400 py-8 text-center text-sm">
+			<p>Generado como prueba de concepto para aprendizaje acelerado.</p>
+			<p class="mt-2 text-xs">
+				Aviso: El tiempo real de adquisición varía según la lengua materna (L1)
+				y la motivación individual. Estimación basada en adultos
+				hispanohablantes (FSI Language Difficulty Ranking).
+			</p>
+		</footer>
+
+		<!-- JavaScript Logic -->
+		<script>
+			// --- 1. Data Definitions ---
+			const resources = [
+				{
+					name: "Anki",
+					category: "Vocabulario (SRS)",
+					type: "Gratis (Pago en iOS)",
+					desc: "El motor principal. Software de tarjetas flash con repetición espaciada. Indispensable.",
+					link: "https://apps.ankiweb.net/",
+				},
+				{
+					name: "Language Transfer",
+					category: "Gramática Intuitiva",
+					type: "Gratis",
+					desc: "Audio curso. Evita la memorización de reglas y enseña a pensar la estructura desde el español.",
+					link: "https://www.languagetransfer.org/",
+				},
+				{
+					name: "Podcasts Nativos",
+					category: "Input (Listening)",
+					type: "Gratis",
+					desc: "Ej: Luke's English Podcast, TED Radio Hour. Usa Spotify/Apple. Clave para el oído.",
+					link: "#",
+				},
+				{
+					name: "iTalki",
+					category: "Output (Speaking)",
+					type: "Pago",
+					desc: "Plataforma para tutores nativos asequibles ($5-$15/h). Alto ROI para simular entrevistas.",
+					link: "https://www.italki.com/",
+				},
+				{
+					name: "Discord (Language Servers)",
+					category: "Output (Speaking)",
+					type: "Gratis",
+					desc: "Salas de voz gratuitas 24/7 para conversar con otros estudiantes. Ideal para perder el miedo.",
+					link: "#",
+				},
+				{
+					name: "LingQ",
+					category: "Input (Reading)",
+					type: "Freemium",
+					desc: "Lector asistido. Permite leer artículos y crear tarjetas flash de palabras desconocidas con un clic.",
+					link: "https://www.lingq.com/",
+				},
+				{
+					name: "ChatGPT (Modo Voz)",
+					category: "Simulación",
+					type: "Gratis",
+					desc: "Úsalo como un compañero de conversación paciente para practicar antes de ir a iTalki.",
+					link: "https://chat.openai.com/",
+				},
+				{
+					name: "YouTube (Subtítulos CC)",
+					category: "Input Audiovisual",
+					type: "Gratis",
+					desc: "Contenido de tu nicho profesional con subtítulos en INGLÉS (nunca en español).",
+					link: "https://youtube.com/",
+				},
+			];
+
+			// --- 2. Chart Configurations (Chart.js) ---
+
+			// Chart 1: Curva del Olvido (Line)
+			const initSRSChart = () => {
+				const ctx = document.getElementById("srsChart").getContext("2d");
+				new Chart(ctx, {
+					type: "line",
+					data: {
+						labels: ["Día 0", "Día 1", "Día 3", "Día 6", "Día 10"],
+						datasets: [
+							{
+								label: "Sin Repaso (Olvido)",
+								data: [100, 33, 15, 5, 2],
+								borderColor: "#94a3b8" /* Slate 400 */,
+								borderDash: [5, 5],
+								tension: 0.4,
+								fill: false,
+							},
+							{
+								label: "Con SRS (Retención)",
+								data: [100, 90, 85, 95, 92] /* Simulated bumps */,
+								borderColor: "#0d9488" /* Accent */,
+								backgroundColor: "rgba(13, 148, 136, 0.1)",
+								tension: 0.4,
+								fill: true,
+								pointBackgroundColor: "#0d9488",
+								pointRadius: 4,
+							},
+						],
+					},
+					options: {
+						responsive: true,
+						maintainAspectRatio: false,
+						plugins: {
+							legend: {
+								position: "bottom",
+								labels: { boxWidth: 12, font: { family: "Inter" } },
+							},
+							tooltip: { mode: "index", intersect: false },
+						},
+						scales: {
+							y: {
+								title: { display: true, text: "% Retención" },
+								min: 0,
+								max: 100,
+							},
+							x: { grid: { display: false } },
+						},
+					},
+				});
+			};
+
+			// Chart 2: Weekday (Donut)
+			const initWeekdayChart = () => {
+				const ctx = document.getElementById("weekdayChart").getContext("2d");
+				new Chart(ctx, {
+					type: "doughnut",
+					data: {
+						labels: ["SRS (Anki)", "Input (Listening)", "Reading/Shadowing"],
+						datasets: [
+							{
+								data: [15, 30, 15],
+								backgroundColor: ["#0f172a", "#0d9488", "#94a3b8"],
+								borderWidth: 0,
+							},
+						],
+					},
+					options: {
+						responsive: true,
+						maintainAspectRatio: false,
+						cutout: "70%",
+						plugins: {
+							legend: { display: false },
+							tooltip: {
+								callbacks: { label: (c) => ` ${c.label}: ${c.raw} min` },
+							},
+						},
+					},
+				});
+			};
+
+			// Chart 3: Weekend (Donut)
+			const initWeekendChart = () => {
+				const ctx = document.getElementById("weekendChart").getContext("2d");
+				new Chart(ctx, {
+					type: "doughnut",
+					data: {
+						labels: ["Output (Hablar)", "Input Extenso"],
+						datasets: [
+							{
+								data: [60, 60], // Represents minutes (1h each roughly)
+								backgroundColor: ["#f59e0b", "#3b82f6"], // distinct colors for weekend
+								borderWidth: 0,
+							},
+						],
+					},
+					options: {
+						responsive: true,
+						maintainAspectRatio: false,
+						cutout: "70%",
+						plugins: {
+							legend: { display: false },
+							tooltip: {
+								callbacks: { label: (c) => ` ${c.label}: ${c.raw} min` },
+							},
+						},
+					},
+				});
+			};
+
+			// --- 3. Interaction Logic ---
+
+			// Render Resource Grid
+			const renderResources = (filter = "Todos") => {
+				const grid = document.getElementById("resourceGrid");
+				grid.innerHTML = "";
+
+				const filtered = resources.filter((r) => {
+					if (filter === "Todos") return true;
+					if (filter === "Gratis") return r.type === "Gratis";
+					if (filter === "Pago")
+						return r.type.includes("Pago") || r.type === "Freemium";
+					return true;
+				});
+
+				filtered.forEach((r) => {
+					const isFree = r.type === "Gratis";
+					const badgeColor = isFree
+						? "bg-green-100 text-green-800"
+						: "bg-blue-100 text-blue-800";
+
+					const card = `
+                    <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold text-lg text-primary">${r.name}</h4>
+                            <span class="text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide ${badgeColor}">${r.type}</span>
+                        </div>
+                        <p class="text-xs font-semibold text-accent mb-2">${r.category}</p>
+                        <p class="text-sm text-secondary mb-4 line-clamp-3">${r.desc}</p>
+                        <a href="${r.link}" target="_blank" class="text-sm font-medium text-primary hover:text-accent flex items-center">
+                            Explorar <span class="ml-1">→</span>
+                        </a>
+                    </div>
+                `;
+					grid.innerHTML += card;
+				});
+			};
+
+			// Filter Function
+			window.filterResources = (filterType) => {
+				// Update button styles
+				document.querySelectorAll(".filter-btn").forEach((btn) => {
+					if (btn.dataset.filter === filterType) {
+						btn.classList.remove("bg-gray-200", "text-secondary");
+						btn.classList.add("bg-primary", "text-white");
+					} else {
+						btn.classList.add("bg-gray-200", "text-secondary");
+						btn.classList.remove("bg-primary", "text-white");
+					}
+				});
+				renderResources(filterType);
+			};
+
+			// Timeline Toggle
+			window.toggleTimeline = (id) => {
+				const content = document.getElementById(`${id}-content`);
+				if (content.classList.contains("hidden")) {
+					content.classList.remove("hidden");
+					content.classList.add("block", "animate-fade-in"); // basic Tailwind transition idea
+				} else {
+					content.classList.add("hidden");
+					content.classList.remove("block");
+				}
+			};
+
+			// Tabs Logic
+			window.switchTab = (event, tabId) => {
+				// Hide all contents
+				document
+					.querySelectorAll(".tab-content")
+					.forEach((el) => el.classList.add("hidden"));
+				// Remove active state from all buttons
+				document.querySelectorAll(".tab-active").forEach((el) => {
+					el.classList.remove("tab-active");
+					el.classList.add("text-gray-500");
+				});
+
+				// Show selected content
+				document.getElementById(`tab-${tabId}`).classList.remove("hidden");
+				// Add active state to clicked button
+				event.currentTarget.classList.add("tab-active");
+				event.currentTarget.classList.remove("text-gray-500");
+			};
+
+			// --- 4. Integración de la API de Gemini ---
+			const apiKey = "";
+
+			async function fetchWithRetry(url, options, retries = 5) {
+				let delay = 1000;
+				for (let i = 0; i < retries; i++) {
+					try {
+						const response = await fetch(url, options);
+						if (!response.ok)
+							throw new Error(`HTTP error! status: ${response.status}`);
+						return await response.json();
+					} catch (error) {
+						if (i === retries - 1) throw error;
+						await new Promise((res) => setTimeout(res, delay));
+						delay *= 2;
+					}
+				}
+			}
+
+			// ✨ Herramienta 1: Sentence Miner
+			window.runSentenceMiner = async () => {
+				const inputEl = document.getElementById("mining-input");
+				const btnEl = document.getElementById("btn-mining");
+				const resultsEl = document.getElementById("mining-results");
+				const text = inputEl.value.trim();
+
+				if (!text) return;
+
+				// Estado de carga
+				btnEl.disabled = true;
+				btnEl.innerHTML = '<span class="spinner"></span> Procesando...';
+				resultsEl.innerHTML = "";
+				resultsEl.classList.add("hidden");
+
+				const prompt = `Actúa como un profesor de inglés experto en el método "Comprehensible Input". Analiza el siguiente texto y extrae de 2 a 3 palabras o expresiones clave de nivel B2/C1, ideales para el entorno profesional.
+            Devuelve el resultado ESTRICTAMENTE en este formato JSON (sin bloques de código markdown, solo el JSON raw):
+            {"tarjetas": [{"palabra": "la palabra en inglés", "oracion_oculta": "La oración original del texto con la palabra oculta mediante [___].", "definicion_es": "Breve definición y traducción al español"}]}
+            Texto: "${text}"`;
+
+				const payload = {
+					contents: [{ parts: [{ text: prompt }] }],
+					generationConfig: { responseMimeType: "application/json" },
+				};
+
+				const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+
+				try {
+					const result = await fetchWithRetry(url, {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify(payload),
+					});
+					const jsonText = result.candidates[0].content.parts[0].text;
+					const data = JSON.parse(jsonText);
+
+					resultsEl.innerHTML =
+						'<p class="text-sm font-semibold text-teal-800 mb-2">¡Tarjetas generadas con éxito! Cópialas a tu Anki:</p>' +
+						data.tarjetas
+							.map(
+								(t) => `
+                    <div class="bg-white p-4 rounded-lg border border-teal-200 shadow-sm relative">
+                        <p class="font-bold text-teal-900 text-lg mb-1">${t.palabra}</p>
+                        <p class="text-sm font-medium text-gray-800 mb-2 leading-relaxed">"${t.oracion_oculta}"</p>
+                        <p class="text-xs text-gray-600 border-l-2 border-teal-300 pl-2"><strong>Definición:</strong> ${t.definicion_es}</p>
+                    </div>
+                `,
+							)
+							.join("");
+					resultsEl.classList.remove("hidden");
+				} catch (e) {
+					console.error(e);
+					resultsEl.innerHTML =
+						'<p class="text-red-600 text-sm font-medium bg-red-50 p-3 rounded-lg border border-red-200">Hubo un error al procesar el texto con la IA. Por favor, revisa tu conexión e inténtalo de nuevo.</p>';
+					resultsEl.classList.remove("hidden");
+				} finally {
+					btnEl.disabled = false;
+					btnEl.innerHTML = "✨ Extraer Vocabulario";
+				}
+			};
+
+			// ✨ Herramienta 2: Simulador de Entrevistas
+			let currentInterviewQuestion = "";
+
+			window.generateInterviewQuestion = async () => {
+				const roleEl = document.getElementById("interview-role");
+				const btnEl = document.getElementById("btn-question");
+				const stage2El = document.getElementById("interview-stage-2");
+				const questionTextEl = document.getElementById(
+					"interview-question-text",
+				);
+				const role = roleEl.value.trim() || "Profesional corporativo";
+
+				btnEl.disabled = true;
+				btnEl.innerHTML = '<span class="spinner"></span> Generando...';
+				stage2El.classList.add("hidden");
+				document.getElementById("interview-feedback").classList.add("hidden");
+				document.getElementById("interview-answer").value = "";
+
+				const prompt = `Actúa como un reclutador senior de Recursos Humanos en una empresa multinacional. El candidato está aplicando para el puesto de "${role}". Hazle UNA SOLA pregunta de entrevista situacional o conductual (tipo STAR) en inglés avanzado (B2). Solo responde con la pregunta en inglés, sin saludos, ni introducciones, ni comillas.`;
+
+				const payload = { contents: [{ parts: [{ text: prompt }] }] };
+				const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+
+				try {
+					const result = await fetchWithRetry(url, {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify(payload),
+					});
+					currentInterviewQuestion =
+						result.candidates[0].content.parts[0].text.trim();
+					questionTextEl.textContent = currentInterviewQuestion;
+					stage2El.classList.remove("hidden");
+				} catch (e) {
+					console.error(e);
+					questionTextEl.innerHTML =
+						'<span class="text-red-600 text-sm">Error al generar la pregunta. Inténtalo de nuevo.</span>';
+					stage2El.classList.remove("hidden");
+				} finally {
+					btnEl.disabled = false;
+					btnEl.innerHTML = "✨ Generar Pregunta";
+				}
+			};
+
+			window.evaluateInterviewAnswer = async () => {
+				const answerEl = document.getElementById("interview-answer");
+				const btnEl = document.getElementById("btn-evaluate");
+				const feedbackEl = document.getElementById("interview-feedback");
+				const answer = answerEl.value.trim();
+
+				if (!answer) return;
+
+				btnEl.disabled = true;
+				btnEl.innerHTML = '<span class="spinner"></span> Evaluando...';
+				feedbackEl.classList.add("hidden");
+
+				const prompt = `Un candidato a un puesto de trabajo respondió a la siguiente pregunta de entrevista en inglés.
+            Pregunta original del reclutador: "${currentInterviewQuestion}"
+            Respuesta del candidato: "${answer}"
+            
+            Evalúa su respuesta asumiendo que el candidato busca alcanzar un nivel de inglés B2/C1.
+            Estructura tu respuesta estrictamente usando etiquetas HTML básicas para darle formato (<p>, <ul>, <li>, <strong>, <em>, <br>). No uses markdown con backticks (\`\`\`).
+            
+            Incluye obligatoriamente estas secciones en tu respuesta HTML:
+            <p><strong>📊 Claridad y Fluidez:</strong> (Un breve comentario en español sobre qué tan bien comunicó la idea central).</p>
+            <p><strong>🛠️ Correcciones Gramaticales:</strong> (Señala y corrige los errores gramaticales de la respuesta original, si los hay).</p>
+            <p><strong>🚀 Mejora de Vocabulario (Nivel B2/C1):</strong> (Sugiérele cómo podría haber dicho lo mismo pero usando jerga profesional o vocabulario de negocios más avanzado).</p>`;
+
+				const payload = { contents: [{ parts: [{ text: prompt }] }] };
+				const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+
+				try {
+					const result = await fetchWithRetry(url, {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify(payload),
+					});
+					let feedbackHtml = result.candidates[0].content.parts[0].text;
+					// Limpiar posibles bloques markdown que se hayan escapado
+					feedbackHtml = feedbackHtml.replace(/```html|```/g, "");
+
+					feedbackEl.innerHTML = feedbackHtml;
+					feedbackEl.classList.remove("hidden");
+				} catch (e) {
+					console.error(e);
+					feedbackEl.innerHTML =
+						'<p class="text-red-600 font-medium bg-red-50 p-3 rounded-lg border border-red-200">Error al contactar a la IA para evaluar tu respuesta.</p>';
+					feedbackEl.classList.remove("hidden");
+				} finally {
+					btnEl.disabled = false;
+					btnEl.innerHTML = "✨ Evaluar mi Respuesta";
+				}
+			};
+
+			// --- Initialization ---
+			document.addEventListener("DOMContentLoaded", () => {
+				initSRSChart();
+				initWeekdayChart();
+				initWeekendChart();
+				renderResources();
+			});
+		</script>
+	</body>
+</html>
